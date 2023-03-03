@@ -1,14 +1,1 @@
--- Configuring done
--- Generating done
--- Build files have been written to: /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm
-[  3%] Building C object CMakeFiles/lmsm_lib.dir/src/main.c.o
-In file included from /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/src/main.c:2:
-/home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/src/lmsm.h:37:9: error: variably modified ‘memory’ at file scope
-   37 |     int memory[TOP_OF_MEMORY + 1];
-      |         ^~~~~~
-/home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/src/lmsm.h:38:10: error: variably modified ‘output_buffer’ at file scope
-   38 |     char output_buffer[OUTPUT_BUFFER_SIZE];
-      |          ^~~~~~~~~~~~~
-make[2]: *** [CMakeFiles/lmsm_lib.dir/build.make:82: CMakeFiles/lmsm_lib.dir/src/main.c.o] Error 1
-make[1]: *** [CMakeFiles/Makefile2:183: CMakeFiles/lmsm_lib.dir/all] Error 2
-make: *** [Makefile:149: all] Error 2
+sh: 1: ./test/lmsm_emulator_tests: not found
