@@ -176,7 +176,7 @@ Expected equality of these values:
   the_machine->memory[199]
     Which is: 50
   999
-[  FAILED  ] lmsm_machine_suite.test_smul_instruction_properly_caps_values (0 ms)
+[  FAILED  ] lmsm_machine_suite.test_smul_instruction_properly_caps_values (1 ms)
 [ RUN      ] lmsm_machine_suite.test_smul_instruction_enters_error_state_if_not_enough_elts
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/lmsm.cpp:404: Failure
 Expected equality of these values:
