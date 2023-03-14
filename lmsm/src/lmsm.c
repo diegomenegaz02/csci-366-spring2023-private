@@ -81,7 +81,8 @@ void lmsm_i_swap(lmsm *our_little_machine) {
 void lmsm_i_sadd(lmsm *our_little_machine) {
     int y = our_little_machine->accumulator; //save for later
     our_little_machine->stack_pointer =200;
-    if(our_little_machine->memory[our_little_machine->stack_pointer-1] == 0){
+    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
+        //Works
         //exit(1);
     }
     int x =our_little_machine->memory[199] + our_little_machine->memory[198];
@@ -95,18 +96,96 @@ void lmsm_i_sadd(lmsm *our_little_machine) {
 }
 
 void lmsm_i_ssub(lmsm *our_little_machine) {
+    int y = our_little_machine->accumulator; //save for later
+    our_little_machine->stack_pointer =200;
+    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
+        //Works
+        //exit(1);
+    }
+    int x =our_little_machine->memory[199] - our_little_machine->memory[198];
+    lmsm_cap_value(&x);
+    lmsm_i_drop(our_little_machine);
+    lmsm_i_drop(our_little_machine); //gets rid of the 2 spots in the stack
+    our_little_machine->accumulator = x;
+    lmsm_i_push(our_little_machine);
+    our_little_machine->accumulator = y;
+
 }
 
 void lmsm_i_smax(lmsm *our_little_machine) {
+    int y = our_little_machine->accumulator; //save for later
+    our_little_machine->stack_pointer =200;
+    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
+        //Works
+        //exit(1);
+    }
+    int x =our_little_machine->memory[199];
+    if(our_little_machine->memory[198] >= x){
+        x = our_little_machine->memory[198];
+    }
+    lmsm_cap_value(&x);
+    lmsm_i_drop(our_little_machine);
+    lmsm_i_drop(our_little_machine); //gets rid of the 2 spots in the stack
+    our_little_machine->accumulator = x;
+    lmsm_i_push(our_little_machine);
+    our_little_machine->accumulator = y;
+
 }
 
 void lmsm_i_smin(lmsm *our_little_machine) {
+    int y = our_little_machine->accumulator; //save for later
+    our_little_machine->stack_pointer =200;
+    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
+        //Works
+        //exit(1);
+    }
+    int x =our_little_machine->memory[199];
+    if(our_little_machine->memory[198] <= x){
+        x = our_little_machine->memory[198];
+    }
+    lmsm_cap_value(&x);
+    lmsm_i_drop(our_little_machine);
+    lmsm_i_drop(our_little_machine); //gets rid of the 2 spots in the stack
+    our_little_machine->accumulator = x;
+    lmsm_i_push(our_little_machine);
+    our_little_machine->accumulator = y;
+
 }
 
 void lmsm_i_smul(lmsm *our_little_machine) {
+    int y = our_little_machine->accumulator; //save for later
+    our_little_machine->stack_pointer =200;
+    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
+        //Works
+        //exit(1);
+    }
+    int x =our_little_machine->memory[199] * our_little_machine->memory[198];
+    lmsm_cap_value(&x);
+    lmsm_i_drop(our_little_machine);
+    lmsm_i_drop(our_little_machine); //gets rid of the 2 spots in the stack
+    our_little_machine->accumulator = x;
+    lmsm_i_push(our_little_machine);
+    our_little_machine->accumulator = y;
+
 }
 
 void lmsm_i_sdiv(lmsm *our_little_machine) {
+    int y = our_little_machine->accumulator; //save for later
+    our_little_machine->stack_pointer =200;
+    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
+        //Works
+        //exit(1);
+    }
+    int x = our_little_machine->memory[199];
+    int z = our_little_machine->memory[198];
+    int div = x/z;
+    lmsm_cap_value(&div);
+    lmsm_i_drop(our_little_machine);
+    lmsm_i_drop(our_little_machine); //gets rid of the 2 spots in the stack
+    our_little_machine->accumulator = div;
+    lmsm_i_push(our_little_machine);
+    our_little_machine->accumulator = y;
+
 }
 void tostring(char str[], int num)
 {
@@ -127,6 +206,7 @@ void tostring(char str[], int num)
     str[len] = '\0';
 }
 void lmsm_i_out(lmsm *our_little_machine) {
+    // DONE
     // TODO, append the current accumulator to the output_buffer in the LMSM
     char string[4000];
     tostring(string,our_little_machine->accumulator);
@@ -243,6 +323,16 @@ void lmsm_exec_instruction(lmsm *our_little_machine, int instruction) {
         lmsm_i_swap(our_little_machine);
     } else if (instruction == 930) {
         lmsm_i_sadd(our_little_machine);
+    }else if (instruction == 931) {
+        lmsm_i_ssub(our_little_machine);
+    }else if (instruction == 932) {
+        lmsm_i_smul(our_little_machine);
+    }else if (instruction == 933) {
+        lmsm_i_sdiv(our_little_machine);
+    }else if (instruction == 934) {
+        lmsm_i_smax(our_little_machine);
+    }else if (instruction == 935) {
+        lmsm_i_smin(our_little_machine);
     }else {
         our_little_machine->error_code = ERROR_UNKNOWN_INSTRUCTION;
         our_little_machine->status = STATUS_HALTED;
