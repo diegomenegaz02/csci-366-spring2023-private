@@ -21,6 +21,9 @@ void lmsm_cap_value(int * val){
 
 int lmsm_has_two_values_on_stack(lmsm *our_little_machine) {
     //TODO - return 0 if there are not two values on the stack
+    if((our_little_machine->memory[199] == 0) && (our_little_machine->memory[198]== 0)){
+        return 0;
+    }
     return 1;
 }
 
@@ -28,10 +31,32 @@ int lmsm_has_two_values_on_stack(lmsm *our_little_machine) {
 //  Instruction Implementation
 //======================================================
 
+
 void lmsm_i_jal(lmsm *our_little_machine) {
+    int temp = our_little_machine->program_counter;
+    if(our_little_machine->stack_pointer == 200){ //Nothing On stack
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
+    }
+    our_little_machine->program_counter = our_little_machine->memory[our_little_machine->stack_pointer]; //Program Counter is now at the value in the top of the stack
+    our_little_machine->stack_pointer ++; //popped
+    //Have Program Counter on Value from Push
+    //Want
+    our_little_machine->return_address_pointer++;
+    our_little_machine->memory[our_little_machine->return_address_pointer] = temp;// Take original Program Counter + 1 add it to return address
+     //incriment
+
+
+
 }
 
 void lmsm_i_ret(lmsm *our_little_machine) {
+    if(our_little_machine->return_address_pointer == 99){
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
+    }
+  our_little_machine->program_counter = our_little_machine->memory[our_little_machine->return_address_pointer];
+  our_little_machine->return_address_pointer--;
 }
 
 void lmsm_i_push(lmsm *our_little_machine) {
@@ -42,50 +67,52 @@ void lmsm_i_push(lmsm *our_little_machine) {
 }
 
 void lmsm_i_pop(lmsm *our_little_machine) {
-
-    our_little_machine->stack_pointer = 200;
-    if(our_little_machine->memory[our_little_machine->stack_pointer-1] == 0){
-        //exit(1);
+    if(our_little_machine->stack_pointer == 200){ //Nothing On stack
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    our_little_machine->accumulator = our_little_machine->memory[our_little_machine->stack_pointer-1];
+    our_little_machine->accumulator = our_little_machine->memory[our_little_machine->stack_pointer];
+    our_little_machine->stack_pointer++;
 
-    for (int i = 199; i > 99; i--) {
-        our_little_machine->memory[i] = our_little_machine->memory[i - 1]; //Brings each item up 1 in the stack of 100
-}
+
 }
 
 void lmsm_i_dup(lmsm *our_little_machine) {
+    int temp = our_little_machine->accumulator;
+    our_little_machine->accumulator = our_little_machine->memory[our_little_machine->stack_pointer];
+    lmsm_i_push(our_little_machine);
+    our_little_machine->accumulator = temp;
 }
 
 void lmsm_i_drop(lmsm *our_little_machine) {
-    our_little_machine->stack_pointer =200;
-    if(our_little_machine->memory[our_little_machine->stack_pointer-1] == 0){
-        //exit(1);
+    if(our_little_machine->stack_pointer == 200){
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    for (int i = our_little_machine->stack_pointer-1; i > 99; i--) {
-        our_little_machine->memory[i] = our_little_machine->memory[i - 1]; //Brings each item up 1 in the stack of 100
-    }
+    our_little_machine->stack_pointer++;
 }
 
 void lmsm_i_swap(lmsm *our_little_machine) {
     int temp;
-    our_little_machine->stack_pointer = 198;
-    if(our_little_machine->memory[our_little_machine->stack_pointer] == 0){
-        //exit(1);
+    if(our_little_machine->stack_pointer == 200 || our_little_machine->stack_pointer == 199){ //if stack only has 0 or 1 item on it
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    temp = our_little_machine->memory[199];
-    our_little_machine->memory[199] = our_little_machine->memory[198];
-    our_little_machine->memory[198] = temp;
+    temp = our_little_machine->memory[our_little_machine->stack_pointer+1];
+    our_little_machine->memory[our_little_machine->stack_pointer + 1] = our_little_machine->memory[our_little_machine->stack_pointer];
+    our_little_machine->memory[our_little_machine->stack_pointer] = temp;
+
 }
 
 void lmsm_i_sadd(lmsm *our_little_machine) {
+
     int y = our_little_machine->accumulator; //save for later
-    our_little_machine->stack_pointer =200;
-    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
-        //Works
-        //exit(1);
+    ;
+    if(our_little_machine->stack_pointer == 200 || our_little_machine->stack_pointer == 199){ //if stack only has 0 or 1 item on it
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    int x =our_little_machine->memory[199] + our_little_machine->memory[198];
+    int x =our_little_machine->memory[our_little_machine->stack_pointer + 1] + our_little_machine->memory[our_little_machine->stack_pointer];
     lmsm_cap_value(&x);
     lmsm_i_drop(our_little_machine);
     lmsm_i_drop(our_little_machine); //gets rid of the 2 spots in the stack
@@ -97,12 +124,12 @@ void lmsm_i_sadd(lmsm *our_little_machine) {
 
 void lmsm_i_ssub(lmsm *our_little_machine) {
     int y = our_little_machine->accumulator; //save for later
-    our_little_machine->stack_pointer =200;
-    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
-        //Works
-        //exit(1);
+
+    if(our_little_machine->stack_pointer == 200 || our_little_machine->stack_pointer == 199){ //if stack only has 0 or 1 item on it
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    int x =our_little_machine->memory[199] - our_little_machine->memory[198];
+    int x =our_little_machine->memory[our_little_machine->stack_pointer + 1] - our_little_machine->memory[our_little_machine->stack_pointer];
     lmsm_cap_value(&x);
     lmsm_i_drop(our_little_machine);
     lmsm_i_drop(our_little_machine); //gets rid of the 2 spots in the stack
@@ -114,14 +141,14 @@ void lmsm_i_ssub(lmsm *our_little_machine) {
 
 void lmsm_i_smax(lmsm *our_little_machine) {
     int y = our_little_machine->accumulator; //save for later
-    our_little_machine->stack_pointer =200;
-    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
-        //Works
-        //exit(1);
+
+    if(our_little_machine->stack_pointer == 200 || our_little_machine->stack_pointer == 199){ //if stack only has 0 or 1 item on it
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    int x =our_little_machine->memory[199];
-    if(our_little_machine->memory[198] >= x){
-        x = our_little_machine->memory[198];
+    int x =our_little_machine->memory[our_little_machine->stack_pointer + 1];
+    if(our_little_machine->memory[our_little_machine->stack_pointer] >= x){
+        x = our_little_machine->memory[our_little_machine->stack_pointer];
     }
     lmsm_cap_value(&x);
     lmsm_i_drop(our_little_machine);
@@ -134,14 +161,14 @@ void lmsm_i_smax(lmsm *our_little_machine) {
 
 void lmsm_i_smin(lmsm *our_little_machine) {
     int y = our_little_machine->accumulator; //save for later
-    our_little_machine->stack_pointer =200;
-    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
-        //Works
-        //exit(1);
+
+    if(our_little_machine->stack_pointer == 200 || our_little_machine->stack_pointer == 199){ //if stack only has 0 or 1 item on it
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    int x =our_little_machine->memory[199];
-    if(our_little_machine->memory[198] <= x){
-        x = our_little_machine->memory[198];
+    int x =our_little_machine->memory[our_little_machine->stack_pointer + 1];
+    if(our_little_machine->memory[our_little_machine->stack_pointer] <= x){
+        x = our_little_machine->memory[our_little_machine->stack_pointer];
     }
     lmsm_cap_value(&x);
     lmsm_i_drop(our_little_machine);
@@ -154,12 +181,12 @@ void lmsm_i_smin(lmsm *our_little_machine) {
 
 void lmsm_i_smul(lmsm *our_little_machine) {
     int y = our_little_machine->accumulator; //save for later
-    our_little_machine->stack_pointer =200;
-    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
-        //Works
-        //exit(1);
+
+    if(our_little_machine->stack_pointer == 200 || our_little_machine->stack_pointer == 199){ //if stack only has 0 or 1 item on it
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    int x =our_little_machine->memory[199] * our_little_machine->memory[198];
+    int x =our_little_machine->memory[our_little_machine->stack_pointer + 1] * our_little_machine->memory[our_little_machine->stack_pointer];
     lmsm_cap_value(&x);
     lmsm_i_drop(our_little_machine);
     lmsm_i_drop(our_little_machine); //gets rid of the 2 spots in the stack
@@ -171,13 +198,13 @@ void lmsm_i_smul(lmsm *our_little_machine) {
 
 void lmsm_i_sdiv(lmsm *our_little_machine) {
     int y = our_little_machine->accumulator; //save for later
-    our_little_machine->stack_pointer =200;
-    if((our_little_machine->memory[our_little_machine->stack_pointer-1] == 0) || (our_little_machine->memory[our_little_machine->stack_pointer-2] == 0)){
-        //Works
-        //exit(1);
+
+    if(our_little_machine->stack_pointer == 200 || our_little_machine->stack_pointer == 199){ //if stack only has 0 or 1 item on it
+        our_little_machine->status = STATUS_HALTED;
+        our_little_machine->error_code = ERROR_BAD_STACK;
     }
-    int x = our_little_machine->memory[199];
-    int z = our_little_machine->memory[198];
+    int x = our_little_machine->memory[our_little_machine->stack_pointer + 1];
+    int z = our_little_machine->memory[our_little_machine->stack_pointer];
     int div = x/z;
     lmsm_cap_value(&div);
     lmsm_i_drop(our_little_machine);
@@ -247,8 +274,8 @@ void lmsm_i_store(lmsm *our_little_machine, int location) {
 }
 
 void lmsm_i_halt(lmsm *our_little_machine) {
-
-    //exit(1);
+    our_little_machine->status = STATUS_HALTED;
+    our_little_machine->error_code = ERROR_BAD_STACK;
 }
 
 void lmsm_i_branch_unconditional(lmsm *our_little_machine, int location) {
@@ -311,6 +338,10 @@ void lmsm_exec_instruction(lmsm *our_little_machine, int instruction) {
         lmsm_i_inp(our_little_machine);
     }else if (instruction == 902) {
         lmsm_i_out(our_little_machine);
+    }else if (instruction == 910) {
+        lmsm_i_jal(our_little_machine);
+    }else if (instruction == 911) {
+        lmsm_i_ret(our_little_machine);
     }else if (instruction == 920) {
         lmsm_i_push(our_little_machine);
     }  else if (instruction == 921) {
