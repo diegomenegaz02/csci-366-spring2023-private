@@ -17,9 +17,9 @@ extern char *ASM_ERROR_OUT_OF_RANGE;
 //  Represents an asm_instruction for the LMSM architecture
 //===================================================================
 typedef struct asm_instruction {
-    char* instruction;         // the type of the asm_instruction
-    char* label;               // the label of the asm_instruction if any
-    char* label_reference;     // the label this asm_instruction refers to, if any
+    char* instruction;         // the type of the asm_instruction// Character String "ADD" (inp)
+    char* label;               // the label of the asm_instruction if any//label null = no label
+    char* label_reference;     // the label this asm_instruction refers to, if any when called in the instruction asm part
     int value;                 // the value of the asm_instruction, if any
     int slots;                // the offset of the asm_instruction, if any
     int offset;                // the offset of the asm_instruction, if any

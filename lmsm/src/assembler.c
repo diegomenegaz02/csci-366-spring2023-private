@@ -51,7 +51,20 @@ asm_instruction * asm_make_instruction(char* type, char *label, char *label_refe
     } else {
         new_instruction->offset = 0;
     }
-    // TODO: set the number of slots for the instruction into the slots field
+    //Non Sudo = 1
+    //Call =3
+    //Squishi =2 Use strcmp returns 0
+    if(strcmp(type,"CALL") == 0){
+        new_instruction->slots = 3;
+    }else if(strcmp(type, "SPUSHI") == 0){
+        new_instruction->slots = 2;
+    }else{
+        new_instruction->slots = 1;
+    }
+
+
+
+    // TODO: set the  number of slots for the instruction into the slots field
     return new_instruction;
 }
 
@@ -119,7 +132,7 @@ int asm_find_label(asm_instruction *root, char *label) {
 //======================================================
 // Assembly Parsing/Scanning
 //======================================================
-
+//FINAL BOSS DUN DUH DUN DUH DUN DUH DUN
 void asm_parse_src(asm_compilation_result * result, char * original_src){
 
     // copy over so strtok can mutate
@@ -127,7 +140,8 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
     strcat(src, original_src);
     asm_instruction * last_instruction = NULL;
     asm_instruction * current_instruction = NULL;
-
+    
+    strtok(src,"\n");
     //TODO - generate a linked list of instructions and store the first into
     //       the result->root
     //
@@ -153,7 +167,7 @@ void asm_gen_code_for_instruction(asm_compilation_result  * result, asm_instruct
     // you will need to look it up with `asm_find_label` and, if the label does not exist,
     // report the error as ASM_ERROR_BAD_LABEL
 
-
+    //Have to resolve the label wherever the label is in memory.(Return offset after traversing linked list)
     int value_for_instruction = instruction->value;
     if (strcmp("ADD", instruction->instruction) == 0) {
         result->code[instruction->offset] = 100 + value_for_instruction;
