@@ -124,6 +124,7 @@ int asm_is_num(char * token){
 }
 
 int asm_find_label(asm_instruction *root, char *label) {
+
     // TODO - scan the linked list for the given label, return -1 if not found
     return -1;
 }
@@ -140,8 +141,57 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
     strcat(src, original_src);
     asm_instruction * last_instruction = NULL;
     asm_instruction * current_instruction = NULL;
-    
-    strtok(src,"\n");
+    char *label_refrence;
+    char *instruction = NULL;
+    char * label = NULL;
+    int arg_val = 0;
+
+    // INP having leading space
+    //PUSH
+    //SDUP
+    //SPOP
+    //OOUT
+    //Three forms
+        //Label <instruction>
+        //<instruction>
+        //<label> <instruction> <arg>
+        //<inst> <arg>
+     char *token = strtok(src,"\n");
+     while( token != NULL){
+
+         int is_inst = asm_is_instruction(token);
+         if(!is_inst){
+             //first token will be label
+             label =token;
+             token = strtok(NULL,"\n");
+         }
+
+         if(token == NULL || !asm_is_instruction(token)){
+             result-> error = ASM_ERROR_UNKNOWN_INSTRUCTION;
+             return;
+         }else{
+             instruction = token;
+             if(asm_instruction_requires_arg(instruction)){
+                 char *argument = strtok(instruction, " ");
+                 argument = strtok(NULL, "\n");
+                 if(asm_is_num(argument)){
+                     arg_val = atoi(argument);
+                     if( arg_val < -999 || arg_val > 999){
+                         result -> error = ASM_ERROR_OUT_OF_RANGE;
+                     }
+                 }else{
+                      label_refrence= argument;
+                 }
+             }
+         }
+         current_instruction = asm_make_instruction(instruction,label,label_refrence,arg_val,last_instruction);
+         if(result->root ==NULL){
+             result->root = current_instruction;
+         }
+         last_instruction = current_instruction;
+         token = strtok(NULL,"\n");
+         //advance to the next token
+     }
     //TODO - generate a linked list of instructions and store the first into
     //       the result->root
     //
