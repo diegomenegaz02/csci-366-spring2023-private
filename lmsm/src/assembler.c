@@ -124,9 +124,15 @@ int asm_is_num(char * token){
 }
 
 int asm_find_label(asm_instruction *root, char *label) {
-
+    if(label == root->label_reference ){
+        return 0;
+    }else if(root->next != NULL ){
+        asm_find_label(root->next, label);
+    }else{
+        return -1;
+    }
     // TODO - scan the linked list for the given label, return -1 if not found
-    return -1;
+
 }
 
 
@@ -134,7 +140,7 @@ int asm_find_label(asm_instruction *root, char *label) {
 // Assembly Parsing/Scanning
 //======================================================
 //FINAL BOSS DUN DUH DUN DUH DUN DUH DUN
-void asm_parse_src(asm_compilation_result * result, char * original_src){
+void  asm_parse_src(asm_compilation_result * result, char * original_src){
 
     // copy over so strtok can mutate
     char * src = calloc(strlen(original_src) + 1, sizeof(char));
@@ -160,10 +166,16 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
      while( token != NULL){
 
          int is_inst = asm_is_instruction(token);
-         if(!is_inst){
-             //first token will be label
-             label =token;
-             token = strtok(NULL,"\n");
+         char *copy = token;
+         char *first = strtok(copy," ");
+         char *second = strtok(NULL, "\n");
+         int x = asm_is_instruction(first);
+         int y = asm_is_instruction(second);
+
+         if(x!=1 && y==1){
+                 //first token will be label
+                 label = strtok(token," ");
+                 token = strtok(NULL,"\n");
          }
 
          if(token == NULL || !asm_is_instruction(token)){
@@ -174,22 +186,32 @@ void asm_parse_src(asm_compilation_result * result, char * original_src){
              if(asm_instruction_requires_arg(instruction)){
                  char *argument = strtok(instruction, " ");
                  argument = strtok(NULL, "\n");
+
                  if(asm_is_num(argument)){
                      arg_val = atoi(argument);
                      if( arg_val < -999 || arg_val > 999){
                          result -> error = ASM_ERROR_OUT_OF_RANGE;
                      }
-                 }else{
+                 }else if (!is_inst){
                       label_refrence= argument;
+
                  }
+
              }
          }
          current_instruction = asm_make_instruction(instruction,label,label_refrence,arg_val,last_instruction);
          if(result->root ==NULL){
              result->root = current_instruction;
          }
+
          last_instruction = current_instruction;
-         token = strtok(NULL,"\n");
+         if(asm_instruction_requires_arg(token) && is_inst){
+             strcmp(token,second);
+
+         }else{
+             token = strtok(NULL,"\n");
+         }
+
          //advance to the next token
      }
     //TODO - generate a linked list of instructions and store the first into
