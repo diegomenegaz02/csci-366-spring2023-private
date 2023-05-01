@@ -147,7 +147,7 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
     strcat(src, original_src);
     asm_instruction * last_instruction = NULL;
     asm_instruction * current_instruction = NULL;
-    char *label_refrence;
+    char *label_refrence = NULL;
     char *instruction = NULL;
     char * label = NULL;
     int arg_val = 0;
@@ -166,17 +166,6 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
      while( token != NULL){
 
          int is_inst = asm_is_instruction(token);
-         char *copy = token;
-         char *first = strtok(copy," ");
-         char *second = strtok(NULL, "\n");
-         int x = asm_is_instruction(first);
-         int y = asm_is_instruction(second);
-
-         if(x!=1 && y==1){
-                 //first token will be label
-                 label = strtok(token," ");
-                 token = strtok(NULL,"\n");
-         }
 
          if(token == NULL || !asm_is_instruction(token)){
              result-> error = ASM_ERROR_UNKNOWN_INSTRUCTION;
@@ -206,7 +195,20 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
 
          last_instruction = current_instruction;
          if(asm_instruction_requires_arg(token) && is_inst){
-             strcmp(token,second);
+        //Trying to get space parsing to work here
+        /*
+        char *copy = NULL;
+         strcpy(copy,token)
+         char *fisrst = strtok(copy," ");
+         char *second =
+         int x = asm_is_instruction(first);
+
+         if(x!=1){
+                 //first token will be label
+                 label = strtok(token," ");
+                 token = strtok(NULL,"\n");
+         }
+        */
 
          }else{
              token = strtok(NULL,"\n");
