@@ -33,7 +33,7 @@ Expected equality of these values:
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:67: Failure
 Expected equality of these values:
   result->error
-    Which is: 0xaaaad60bffc8
+    Which is: 0xaaaae5320018
   nullptr
     Which is: (nullptr)
 [  FAILED  ] parsing_tests.two_instruction_parsing_works_w_space (0 ms)
@@ -43,7 +43,7 @@ Expected equality of these values:
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:87: Failure
 Expected equality of these values:
   result->error
-    Which is: 0xaaaad60bffc8
+    Which is: 0xaaaae5320018
   nullptr
     Which is: (nullptr)
 [  FAILED  ] parsing_tests.label_is_parsed_correctly (0 ms)
@@ -51,7 +51,7 @@ Expected equality of these values:
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:98: Failure
 Expected equality of these values:
   result->error
-    Which is: 0xaaaad60bffc8
+    Which is: 0xaaaae5320018
   nullptr
     Which is: (nullptr)
 [  FAILED  ] parsing_tests.numeric_reference_works_for_branch (0 ms)
@@ -59,7 +59,7 @@ Expected equality of these values:
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:109: Failure
 Expected equality of these values:
   result->error
-    Which is: 0xaaaad60bffc8
+    Which is: 0xaaaae5320018
   nullptr
     Which is: (nullptr)
 [  FAILED  ] parsing_tests.label_reference_works_for_branch (0 ms)
