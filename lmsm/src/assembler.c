@@ -194,25 +194,9 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
          }
 
          last_instruction = current_instruction;
-         if(asm_instruction_requires_arg(token) && is_inst){
-        //Trying to get space parsing to work here
-        /*
-        char *copy = NULL;
-         strcpy(copy,token)
-         char *fisrst = strtok(copy," ");
-         char *second =
-         int x = asm_is_instruction(first);
 
-         if(x!=1){
-                 //first token will be label
-                 label = strtok(token," ");
-                 token = strtok(NULL,"\n");
-         }
-        */
-
-         }else{
              token = strtok(NULL,"\n");
-         }
+
 
          //advance to the next token
      }
@@ -245,8 +229,72 @@ void asm_gen_code_for_instruction(asm_compilation_result  * result, asm_instruct
     int value_for_instruction = instruction->value;
     if (strcmp("ADD", instruction->instruction) == 0) {
         result->code[instruction->offset] = 100 + value_for_instruction;
-    } else {
-        result->code[instruction->offset] = 0;
+    } else if(strcmp("SUB",instruction->instruction ) == 0) {
+        result->code[instruction->offset] = 200 + value_for_instruction;
+    }else if(strcmp("STA",instruction->instruction) == 0 ) {
+        result->code[instruction->offset] = 300 + value_for_instruction;
+    }else if(strcmp("LDI",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 400 + value_for_instruction;
+    }else if(strcmp("LDA",instruction->instruction) == 0 ) {
+        result->code[instruction->offset] = 500 + value_for_instruction;
+        if(instruction->label != NULL){
+            //check label and then get refrence
+        }
+    }else if(strcmp("BRA",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 600 + value_for_instruction;
+    }else if(strcmp("BRZ",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 700 + value_for_instruction;
+    }else if(strcmp("BRP",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 800 + value_for_instruction;
+    }else if(strcmp("INP",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 901;
+    }else if(strcmp("OUT",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 902;
+    }else if(strcmp("HALT",instruction->instruction) == 0 ) {
+        result->code[instruction->offset] = 000;
+    }else if(strcmp("SPUSH",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 920;
+    }else if(strcmp("SPOP",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 921;
+    }else if(strcmp("SDUP",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 922;
+    }else if(strcmp("SDROP",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 923;
+    }else if(strcmp("SSWAP",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 924;
+    }else if(strcmp("SADD",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 930;
+    }else if(strcmp("SSUB",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 931;
+    }else if(strcmp("SMUL",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 932;
+    }else if(strcmp("SDIV",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 933;
+    }else if(strcmp("SMAX",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 934;
+    }else if(strcmp("SMIN",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 935;
+    }else if(strcmp("SPUSHI",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 400 + value_for_instruction;
+        result->code[instruction->offset + 1] = 920;
+    }else if(strcmp("RET",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 911;
+    }else if(strcmp("CALL",instruction->instruction) == 0) {
+        result->code[instruction->offset] = 400 + value_for_instruction;
+        result->code[instruction->offset + 1] = 920;
+        result->code[instruction->offset + 2] = 911;
+    }else if(strcmp("DAT",instruction->instruction) == 0) {
+        result->code[instruction->offset] = value_for_instruction;
+    }else if(strcmp("HLT",instruction->instruction) == 0 || strcmp("COB",instruction->instruction) ==0) {
+        return;
+    }else{
+        int labelF = asm_find_label(instruction->instruction,instruction->label);
+        if(labelF == 0 ){
+            //tbd
+        }else{
+            result->error = ASM_ERROR_BAD_LABEL;
+            return;
+        }
     }
 
 }
@@ -269,3 +317,4 @@ asm_compilation_result * asm_assemble(char *src) {
     asm_gen_code(result);
     return result;
 }
+
