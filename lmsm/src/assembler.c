@@ -162,52 +162,66 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
         //<instruction>
         //<label> <instruction> <arg>
         //<inst> <arg>
-     char *token = strtok(src,"\n");
+     char *token = strtok(src," \n");
      while( token != NULL){
 
          int is_inst = asm_is_instruction(token);
-
-         if(token == NULL || !asm_is_instruction(token)){
+         if(token == NULL){
              result-> error = ASM_ERROR_UNKNOWN_INSTRUCTION;
              return;
-         }else{
+         }
+         if (!asm_is_instruction(token)) {
+             label = token;
+             token = strtok(src," \n");
+         }
+         is_inst = asm_is_instruction(token);
+         if (token == NULL || !asm_is_instruction(token)) {
+             result-> error = ASM_ERROR_UNKNOWN_INSTRUCTION;
+             return;
+         } else {
              instruction = token;
-             if(asm_instruction_requires_arg(instruction)){
-                 char *argument = strtok(instruction, " ");
-                 argument = strtok(NULL, "\n");
+         }
 
-                 if(asm_is_num(argument)){
-                     arg_val = atoi(argument);
-                     if( arg_val < -999 || arg_val > 999){
-                         result -> error = ASM_ERROR_OUT_OF_RANGE;
-                     }
-                 }else if (!is_inst){
-                      label_refrence= argument;
+         if(asm_instruction_requires_arg(instruction)){
+             char *argument = strtok(instruction, " \n");
 
+             if(asm_is_num(argument)){
+                 arg_val = atoi(argument);
+                 if( arg_val < -999 || arg_val > 999){
+                     result -> error = ASM_ERROR_OUT_OF_RANGE;
+                     return;
                  }
+             }else if (!is_inst){
+                  label_refrence= argument;
 
              }
+
          }
+
          current_instruction = asm_make_instruction(instruction,label,label_refrence,arg_val,last_instruction);
          if(result->root ==NULL){
              result->root = current_instruction;
          }
 
          last_instruction = current_instruction;
+<<<<<<< HEAD
 
              token = strtok(NULL,"\n");
 
 
          //advance to the next token
+=======
+         token = strtok(NULL,"\n");
+>>>>>>> 21e0c42f3fa07619507a3feb2488028ed14244a2
      }
     //TODO - generate a linked list of instructions and store the first into
     //       the result->root
     //
     //       generate the following errors as appropriate:
     //
-    //       ASM_ERROR_UNKNOWN_INSTRUCTION - when an unknown instruction is encountered
-    //       ASM_ERROR_ARG_REQUIRED        - when an instruction does not have a proper argument passed to it
-    //       ASM_ERROR_OUT_OF_RANGE        - when a number argument is out of range (-999 to 999)
+    //       DOne ASM_ERROR_UNKNOWN_INSTRUCTION - when an unknown instruction is encountered
+    //       Done ASM_ERROR_ARG_REQUIRED        - when an instruction does not have a proper argument passed to it
+    //       Done ASM_ERROR_OUT_OF_RANGE        - when a number argument is out of range (-999 to 999)
     //
     //       store the error in result->error
 }
