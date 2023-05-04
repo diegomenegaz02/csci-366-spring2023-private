@@ -151,6 +151,7 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
     char *instruction = NULL;
     char * label = NULL;
     int arg_val = 0;
+    int following_label =0 ;
 
     // INP having leading space
     //PUSH
@@ -164,38 +165,32 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
         //<inst> <arg>
      char *token = strtok(src," \n");
      while( token != NULL){
-
          int is_inst = asm_is_instruction(token);
          if(token == NULL){
              result-> error = ASM_ERROR_UNKNOWN_INSTRUCTION;
              return;
          }
+         if(following_label == 1){
+             last_instruction->instruction = token;
+         }
          if (!asm_is_instruction(token)) {
              label = token;
-             token = strtok(src," \n");
+            following_label = 1;
+            token = strtok(NULL,"\n");
+            instruction = token;
          }
-         is_inst = asm_is_instruction(token);
-         if (token == NULL || !asm_is_instruction(token)) {
-             result-> error = ASM_ERROR_UNKNOWN_INSTRUCTION;
-             return;
-         } else {
+         if(label== NULL  && following_label == 0){
              instruction = token;
          }
-
+         //If label wasnt set label will be null
          if(asm_instruction_requires_arg(instruction)){
-             char *argument = strtok(instruction, " \n");
-
-             if(asm_is_num(argument)){
-                 arg_val = atoi(argument);
+             if(asm_is_num(token)){
+                 arg_val = atoi(token);
                  if( arg_val < -999 || arg_val > 999){
                      result -> error = ASM_ERROR_OUT_OF_RANGE;
                      return;
                  }
-             }else if (!is_inst){
-                  label_refrence= argument;
-
              }
-
          }
 
          current_instruction = asm_make_instruction(instruction,label,label_refrence,arg_val,last_instruction);
@@ -206,12 +201,15 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
          last_instruction = current_instruction;
 
 
-             token = strtok(NULL,"\n");
+
 
 
          //advance to the next token
 
-         token = strtok(NULL,"\n");
+            token = strtok(NULL,"\n");
+
+
+
 
      }
     //TODO - generate a linked list of instructions and store the first into
