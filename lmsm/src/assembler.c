@@ -124,14 +124,14 @@ int asm_is_num(char * token){
 }
 
 int asm_find_label(asm_instruction *root, char *label) {
-    if(label == root->label_reference ){
-        return 0;
+    if(label == root->label){
+        return root->value;
     }else if(root->next != NULL ){
         asm_find_label(root->next, label);
     }else{
         return -1;
     }
-    // TODO - scan the linked list for the given label, return -1 if not found
+    // Done (BUT IN GREEN SOMEHOW)
 
 }
 
@@ -204,18 +204,18 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
          }
 
          last_instruction = current_instruction;
-<<<<<<< HEAD
+
 
              token = strtok(NULL,"\n");
 
 
          //advance to the next token
-=======
+
          token = strtok(NULL,"\n");
->>>>>>> 21e0c42f3fa07619507a3feb2488028ed14244a2
+
      }
     //TODO - generate a linked list of instructions and store the first into
-    //       the result->root
+    //       the result->root 
     //
     //       generate the following errors as appropriate:
     //
@@ -241,6 +241,7 @@ void asm_gen_code_for_instruction(asm_compilation_result  * result, asm_instruct
 
     //Have to resolve the label wherever the label is in memory.(Return offset after traversing linked list)
     int value_for_instruction = instruction->value;
+    int real_label = asm_find_label(instruction,instruction->label_reference);
     if (strcmp("ADD", instruction->instruction) == 0) {
         result->code[instruction->offset] = 100 + value_for_instruction;
     } else if(strcmp("SUB",instruction->instruction ) == 0) {
@@ -250,10 +251,19 @@ void asm_gen_code_for_instruction(asm_compilation_result  * result, asm_instruct
     }else if(strcmp("LDI",instruction->instruction) == 0) {
         result->code[instruction->offset] = 400 + value_for_instruction;
     }else if(strcmp("LDA",instruction->instruction) == 0 ) {
-        result->code[instruction->offset] = 500 + value_for_instruction;
-        if(instruction->label != NULL){
-            //check label and then get refrence
+        if(instruction ->label_reference == NULL) {
+            result->code[instruction->offset] = 500 + value_for_instruction;
+        }else if(real_label !=-1){
+            //I thought about it and couldn't find a reason not to just have it return the val instead of 0.
+            //Other than what I thought was assigned, just to do another while loop just seems uneeded.
+            int label_val = asm_find_label(instruction,instruction->label_reference);
+            value_for_instruction = label_val;
+            result->code[instruction->offset] = 500 + value_for_instruction;
+        }else{
+            result->error = ASM_ERROR_BAD_LABEL;
+            return;
         }
+
     }else if(strcmp("BRA",instruction->instruction) == 0) {
         result->code[instruction->offset] = 600 + value_for_instruction;
     }else if(strcmp("BRZ",instruction->instruction) == 0) {
@@ -299,16 +309,9 @@ void asm_gen_code_for_instruction(asm_compilation_result  * result, asm_instruct
         result->code[instruction->offset + 2] = 911;
     }else if(strcmp("DAT",instruction->instruction) == 0) {
         result->code[instruction->offset] = value_for_instruction;
+
     }else if(strcmp("HLT",instruction->instruction) == 0 || strcmp("COB",instruction->instruction) ==0) {
         return;
-    }else{
-        int labelF = asm_find_label(instruction->instruction,instruction->label);
-        if(labelF == 0 ){
-            //tbd
-        }else{
-            result->error = ASM_ERROR_BAD_LABEL;
-            return;
-        }
     }
 
 }
