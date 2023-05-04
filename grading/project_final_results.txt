@@ -8,7 +8,7 @@ Expected equality of these values:
   the_machine->accumulator
     Which is: 0
   6
-[  FAILED  ] instruction_construction.multiplication_works_in_firth (1 ms)
+[  FAILED  ] instruction_construction.multiplication_works_in_firth (0 ms)
 [ RUN      ] instruction_construction.max_works_in_firth
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/firth.cpp:31: Failure
 Expected equality of these values:
@@ -24,7 +24,7 @@ Expected equality of these values:
 [       OK ] instruction_construction.make_instruction_call_takes_three_slots (0 ms)
 [ RUN      ] instruction_construction.make_instruction_properly_offsets_based_on_preceding_instruction
 [       OK ] instruction_construction.make_instruction_properly_offsets_based_on_preceding_instruction (0 ms)
-[----------] 6 tests from instruction_construction (1 ms total)
+[----------] 6 tests from instruction_construction (0 ms total)
 
 [----------] 10 tests from parsing_tests
 [ RUN      ] parsing_tests.simple_instruction_parsing_works
@@ -33,7 +33,7 @@ Expected equality of these values:
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:67: Failure
 Expected equality of these values:
   result->error
-    Which is: 0xaaaad5da0018
+    Which is: 0xaaaadb8a0018
   nullptr
     Which is: (nullptr)
 [  FAILED  ] parsing_tests.two_instruction_parsing_works_w_space (0 ms)
@@ -43,7 +43,7 @@ Expected equality of these values:
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:87: Failure
 Expected equality of these values:
   result->error
-    Which is: 0xaaaad5da0018
+    Which is: 0xaaaadb8a0018
   nullptr
     Which is: (nullptr)
 [  FAILED  ] parsing_tests.label_is_parsed_correctly (0 ms)
@@ -51,7 +51,7 @@ Expected equality of these values:
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:98: Failure
 Expected equality of these values:
   result->error
-    Which is: 0xaaaad5da0018
+    Which is: 0xaaaadb8a0018
   nullptr
     Which is: (nullptr)
 [  FAILED  ] parsing_tests.numeric_reference_works_for_branch (0 ms)
@@ -59,7 +59,7 @@ Expected equality of these values:
 /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:109: Failure
 Expected equality of these values:
   result->error
-    Which is: 0xaaaad5da0018
+    Which is: 0xaaaadb8a0018
   nullptr
     Which is: (nullptr)
 [  FAILED  ] parsing_tests.label_reference_works_for_branch (0 ms)

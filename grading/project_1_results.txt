@@ -1,2 +1,1 @@
-Scanning dependencies of target lmsm_lib
 [  3%] Building C object CMakeFiles/lmsm_lib.dir/src/assembler.c.o
