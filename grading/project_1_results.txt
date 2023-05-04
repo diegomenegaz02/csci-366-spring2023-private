@@ -1,1 +1,29 @@
-[  3%] Building C object CMakeFiles/lmsm_lib.dir/src/assembler.c.o
+Scanning dependencies of target lmsm_lib
+[  3%] Building C object CMakeFiles/lmsm_lib.dir/src/main.c.o
+[  6%] Building C object CMakeFiles/lmsm_lib.dir/src/assembler.c.o
+[ 10%] Building C object CMakeFiles/lmsm_lib.dir/src/repl.c.o
+[ 13%] Building C object CMakeFiles/lmsm_lib.dir/src/firth.c.o
+[ 17%] Linking C static library liblmsm_lib.a
+[ 20%] Built target lmsm_lib
+Scanning dependencies of target lmsm
+[ 24%] Building C object CMakeFiles/lmsm.dir/src/main.c.o
+[ 27%] Building C object CMakeFiles/lmsm.dir/src/assembler.c.o
+[ 31%] Building C object CMakeFiles/lmsm.dir/src/repl.c.o
+[ 34%] Building C object CMakeFiles/lmsm.dir/src/firth.c.o
+[ 37%] Linking C executable lmsm
+[ 41%] Built target lmsm
+[ 48%] Built target gtest
+[ 55%] Built target gtest_main
+Scanning dependencies of target lmsm_assembler_tests
+[ 58%] Building CXX object test/CMakeFiles/lmsm_assembler_tests.dir/assembler.cpp.o
+[ 62%] Linking CXX executable lmsm_assembler_tests
+[ 65%] Built target lmsm_assembler_tests
+Scanning dependencies of target lmsm_tests
+[ 68%] Building CXX object test/CMakeFiles/lmsm_tests.dir/firth.cpp.o
+[ 72%] Building CXX object test/CMakeFiles/lmsm_tests.dir/assembler.cpp.o
+[ 75%] Linking CXX executable lmsm_tests
+[ 79%] Built target lmsm_tests
+[ 82%] Linking CXX executable lmsm_emulator_tests
+[ 86%] Built target lmsm_emulator_tests
+[ 93%] Built target gmock
+[100%] Built target gmock_main
