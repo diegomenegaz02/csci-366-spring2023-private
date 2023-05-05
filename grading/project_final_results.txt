@@ -1,5 +1,5 @@
 Running main() from /home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/lib/googletest/src/gtest_main.cc
-[==========] Running 89 tests from 5 test suites.
+[==========] Running 87 tests from 5 test suites.
 [----------] Global test environment set-up.
 [----------] 6 tests from instruction_construction
 [ RUN      ] instruction_construction.multiplication_works_in_firth
@@ -30,39 +30,9 @@ Expected equality of these values:
 [ RUN      ] parsing_tests.simple_instruction_parsing_works
 [       OK ] parsing_tests.simple_instruction_parsing_works (0 ms)
 [ RUN      ] parsing_tests.two_instruction_parsing_works_w_space
-/home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:67: Failure
-Expected equality of these values:
-  result->error
-    Which is: 0xaaaae2f80018
-  nullptr
-    Which is: (nullptr)
-[  FAILED  ] parsing_tests.two_instruction_parsing_works_w_space (0 ms)
+[       OK ] parsing_tests.two_instruction_parsing_works_w_space (0 ms)
 [ RUN      ] parsing_tests.two_instruction_parsing_works_w_newline
 [       OK ] parsing_tests.two_instruction_parsing_works_w_newline (0 ms)
 [ RUN      ] parsing_tests.label_is_parsed_correctly
-/home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:87: Failure
-Expected equality of these values:
-  result->error
-    Which is: 0xaaaae2f80018
-  nullptr
-    Which is: (nullptr)
-[  FAILED  ] parsing_tests.label_is_parsed_correctly (0 ms)
+[       OK ] parsing_tests.label_is_parsed_correctly (0 ms)
 [ RUN      ] parsing_tests.numeric_reference_works_for_branch
-/home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:98: Failure
-Expected equality of these values:
-  result->error
-    Which is: 0xaaaae2f80018
-  nullptr
-    Which is: (nullptr)
-[  FAILED  ] parsing_tests.numeric_reference_works_for_branch (0 ms)
-[ RUN      ] parsing_tests.label_reference_works_for_branch
-/home/parallels/autograder/csci-366-spring2023/grading/scripts/repos/diego_menegaz/lmsm/test/assembler.cpp:109: Failure
-Expected equality of these values:
-  result->error
-    Which is: 0xaaaae2f80018
-  nullptr
-    Which is: (nullptr)
-[  FAILED  ] parsing_tests.label_reference_works_for_branch (0 ms)
-[ RUN      ] parsing_tests.unknown_instruction_is_handled
-[       OK ] parsing_tests.unknown_instruction_is_handled (0 ms)
-[ RUN      ] parsing_tests.no_argument_for_instruction_causes_error
