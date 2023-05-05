@@ -198,10 +198,10 @@ Expected equality of these values:
 [       OK ] lmsm_machine_suite.step_steps_to_the_next_instruction_and_executes_current (0 ms)
 [ RUN      ] lmsm_machine_suite.step_does_not_step_to_the_next_instruction_and_execute_if_machine_is_halted
 [       OK ] lmsm_machine_suite.step_does_not_step_to_the_next_instruction_and_execute_if_machine_is_halted (0 ms)
-[----------] 42 tests from lmsm_machine_suite (0 ms total)
+[----------] 42 tests from lmsm_machine_suite (1 ms total)
 
 [----------] Global test environment tear-down
-[==========] 87 tests from 5 test suites ran. (0 ms total)
+[==========] 87 tests from 5 test suites ran. (1 ms total)
 [  PASSED  ] 85 tests.
 [  FAILED  ] 2 tests, listed below:
 [  FAILED  ] instruction_construction.multiplication_works_in_firth
