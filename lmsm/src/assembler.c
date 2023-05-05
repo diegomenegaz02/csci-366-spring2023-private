@@ -166,10 +166,7 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
      char *token = strtok(src," \n");
      while( token != NULL){
          int is_inst = asm_is_instruction(token);
-         if(token == NULL){
-             result-> error = ASM_ERROR_UNKNOWN_INSTRUCTION;
-             return;
-         }
+
          if(following_label == 1){
              last_instruction->instruction = token;
          }
@@ -182,14 +179,28 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
          if(label== NULL  && following_label == 0){
              instruction = token;
          }
+         if(!asm_is_instruction(token) && label != NULL){
+             result-> error = ASM_ERROR_UNKNOWN_INSTRUCTION;
+             return;
+         }
          //If label wasnt set label will be null
-         if(asm_instruction_requires_arg(instruction)){
-             if(asm_is_num(token)){
+
+         if(asm_instruction_requires_arg(instruction)) {
+
+             token = strtok(NULL, "\n");
+             if(token != NULL){
+             if (asm_is_num(token)) {
                  arg_val = atoi(token);
-                 if( arg_val < -999 || arg_val > 999){
-                     result -> error = ASM_ERROR_OUT_OF_RANGE;
+                 if (arg_val < -999 || arg_val > 999) {
+                     result->error = ASM_ERROR_OUT_OF_RANGE;
                      return;
                  }
+             } else {
+                 label_refrence = token;
+             }
+         }else{
+                 result->error = ASM_ERROR_ARG_REQUIRED;
+                 return;
              }
          }
 
@@ -213,7 +224,7 @@ void  asm_parse_src(asm_compilation_result * result, char * original_src){
 
      }
     //TODO - generate a linked list of instructions and store the first into
-    //       the result->root 
+    //       the result->root
     //
     //       generate the following errors as appropriate:
     //
