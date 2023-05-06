@@ -201,7 +201,7 @@ Expected equality of these values:
 [----------] 42 tests from lmsm_machine_suite (0 ms total)
 
 [----------] Global test environment tear-down
-[==========] 87 tests from 5 test suites ran. (1 ms total)
+[==========] 87 tests from 5 test suites ran. (0 ms total)
 [  PASSED  ] 85 tests.
 [  FAILED  ] 2 tests, listed below:
 [  FAILED  ] instruction_construction.multiplication_works_in_firth
